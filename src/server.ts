@@ -9,6 +9,7 @@ import travelPackageRoutes from './routes/travelPackageRoutes';
 import bookingRoutes from './routes/bookingRoutes';
 import userRoutes from './routes/userRoutes';
 import healthRoutes from './routes/healthRoutes';
+import paymentRoutes from './routes/paymentRoutes';
 
 dotenv.config();
 

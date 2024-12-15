@@ -1,6 +1,6 @@
 ### Variables d'environnement
-@baseUrl = http://localhost:5002/api
-@authToken =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NWVlYjQ0Nzc1Zjc1MTgwMWUzYWY4OCIsImlhdCI6MTczNDI3Mzg2MCwiZXhwIjoxNzM2ODY1ODYwfQ.2tAkJRnjIvQM4x-0c-tSPkkerKiTTf90iFRZBLfXhjo
+@baseUrl = https://bakrbackend-1.onrender.com/api
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NWYwZTMxYmZiODZiNGQzZDY3OTdlZSIsImlhdCI6MTczNDI4MjgwMywiZXhwIjoxNzM2ODc0ODAzfQ.Y6sdr4JMOYoWTMaMq8fn_1DOEZeUBAuE2sPePtDs46w
 
 ### ===== TESTS DE SANTÉ =====
 ### Test de santé du serveur
@@ -10,148 +10,59 @@ GET {{baseUrl}}/health
 GET {{baseUrl}}/health/db
 
 ### ===== AUTHENTIFICATION =====
-### Créer un compte (Signup)
-POST {{baseUrl}}/users/signup
-Content-Type: application/json
-
-{
-    "firstName": "Test",
-    "lastName": "User",
-    "email": "test@test.com",
-    "password": "Test123!",
-    "phoneNumber": "+33612345678"
-}
-
-### Se connecter (Login)
+### Login
 POST {{baseUrl}}/users/login
 Content-Type: application/json
 
 {
-    "email": "test@test.com",
+    "email": "test7@example.com",
     "password": "Test123!"
 }
 
-### ===== PACKAGES DE VOYAGE =====
-### Liste tous les packages
+### ===== PACKAGES =====
+### Liste des packages
 GET {{baseUrl}}/travel-packages
 Authorization: Bearer {{authToken}}
 
-### Packages Hajj uniquement
+### Filtrer packages Hajj
 GET {{baseUrl}}/travel-packages?type=hajj
 Authorization: Bearer {{authToken}}
 
-### Packages Omra uniquement
+### Filtrer packages Omra
 GET {{baseUrl}}/travel-packages?type=omra
 Authorization: Bearer {{authToken}}
 
-### Recherche de packages par date
-GET {{baseUrl}}/travel-packages?startDate=2024-05-01&endDate=2024-06-01
-Authorization: Bearer {{authToken}}
-
-### Filtrer les packages par prix
-GET {{baseUrl}}/travel-packages?minPrice=1000&maxPrice=5000
-Authorization: Bearer {{authToken}}
-
-### ===== CRÉATION DE PACKAGES DE TEST =====
-### Créer un package Hajj
-POST {{baseUrl}}/travel-packages
-Content-Type: application/json
-Authorization: Bearer {{authToken}}
-
-{
-    "title": "Hajj Premium 2024",
-    "frontTitle": "Hajj Premium",
-    "type": "hajj",
-    "category": "premium",
-    "description": "Package Hajj tout inclus",
-    "price": 5000,
-    "date": "2024-05-01",
-    "startDate": "2024-05-01",
-    "endDate": "2024-05-15",
-    "duration": 15,
-    "location": "Mecque",
-    "maxParticipants": 50,
-    "included": [
-        "Vol aller-retour",
-        "Hébergement 5 étoiles",
-        "Transport local",
-        "Guide spirituel"
-    ]
-}
-
-### Créer un package Omra
-POST {{baseUrl}}/travel-packages
-Content-Type: application/json
-Authorization: Bearer {{authToken}}
-
-{
-    "title": "Omra Ramadan 2024",
-    "frontTitle": "Omra Ramadan",
-    "type": "omra",
-    "category": "standard",
-    "description": "Package Omra spécial Ramadan",
-    "price": 3000,
-    "date": "2024-03-15",
-    "startDate": "2024-03-15",
-    "endDate": "2024-03-25",
-    "duration": 10,
-    "location": "Mecque",
-    "maxParticipants": 30,
-    "included": [
-        "Vol aller-retour",
-        "Hébergement 4 étoiles",
-        "Transport local",
-        "Guide spirituel"
-    ]
-}
-
-### ===== RÉSERVATIONS (Nécessite authentification) =====
-### Créer une réservation
-POST {{baseUrl}}/bookings
-Authorization: Bearer {{authToken}}
-Content-Type: application/json
-
-{
-    "travelPackage": "ID_COPIÉ_ICI",
-    "numberOfPeople": 2,
-    "specialRequests": "Chambre avec vue",
-    "totalPrice": 6000,
-    "status": "pending",
-    "paymentStatus": "pending",
-    "contactInformation": {
-        "email": "test@test.com",
-        "phone": "+33612345678"
-    },
-    "passengers": [
-        {
-            "firstName": "John",
-            "lastName": "Doe",
-            "passportNumber": "12345678",
-            "dateOfBirth": "1990-01-01"
-        },
-        {
-            "firstName": "Jane",
-            "lastName": "Doe",
-            "passportNumber": "87654321",
-            "dateOfBirth": "1992-01-01"
-        }
-    ]
-}
-
-### Liste des réservations de l'utilisateur
+### ===== RÉSERVATIONS =====
+### Liste des réservations
 GET {{baseUrl}}/bookings
 Authorization: Bearer {{authToken}}
 
-### Détails d'une réservation spécifique
-GET {{baseUrl}}/bookings/un_vrai_id_de_reservation
+### Détails d'une réservation
+GET {{baseUrl}}/bookings/675ef053775f751801e3afb1
 Authorization: Bearer {{authToken}}
 
-### ===== PROFIL UTILISATEUR =====
-### Obtenir le profil
+### ===== PAIEMENTS =====
+### Initialiser un paiement
+POST {{baseUrl}}/bookings/675ef053775f751801e3afb1/payments
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "amount": 6000,
+    "currency": "EUR",
+    "paymentMethod": "card"
+}
+
+### Liste des paiements d'une réservation
+GET {{baseUrl}}/bookings/675ef053775f751801e3afb1/payments
+Authorization: Bearer {{authToken}}
+
+### ===== PROFIL =====
+### Obtenir mon profil
 GET {{baseUrl}}/users/me
 Authorization: Bearer {{authToken}}
 
-### Mettre à jour le profil
+### Mettre à jour mon profil
 PATCH {{baseUrl}}/users/updateMe
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
@@ -160,42 +71,4 @@ Content-Type: application/json
     "firstName": "Test Updated",
     "lastName": "User Updated",
     "phoneNumber": "+33698765432"
-}
-
-### Supprimer le profil
-DELETE {{baseUrl}}/users/deleteMe
-Authorization: Bearer {{authToken}}
-
-### Test des packages Hajj
-GET {{baseUrl}}/travel-packages?type=hajj
-Authorization: Bearer {{authToken}}
-
-### Test des packages Omra
-GET {{baseUrl}}/travel-packages?type=omra
-Authorization: Bearer {{authToken}}
-
-### Créer un nouveau package Hajj pour test
-POST {{baseUrl}}/travel-packages
-Authorization: Bearer {{authToken}}
-Content-Type: application/json
-
-{
-    "title": "Hajj VIP 2024",
-    "frontTitle": "Hajj VIP",
-    "type": "hajj",
-    "category": "premium",
-    "description": "Package Hajj VIP tout inclus",
-    "price": 7000,
-    "date": "2024-06-01",
-    "startDate": "2024-06-01",
-    "endDate": "2024-06-15",
-    "duration": 15,
-    "location": "Mecque",
-    "maxParticipants": 30,
-    "included": [
-        "Vol business class",
-        "Hôtel 5 étoiles vue Kaaba",
-        "Transport privé",
-        "Guide personnel"
-    ]
 }

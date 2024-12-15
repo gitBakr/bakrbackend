@@ -1,10 +1,13 @@
 ﻿import express from 'express';
 import { protect } from '../middleware/auth';
 import * as bookingController from '../controllers/bookingController';
+import paymentRoutes from './paymentRoutes';
 
 const router = express.Router();
 
 router.use(protect);
+
+router.use('/:bookingId/payments', paymentRoutes);
 
 router.get('/my-bookings', bookingController.getMyBookings);
 
